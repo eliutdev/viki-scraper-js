@@ -1,10 +1,15 @@
 import { parseHTML } from "linkedom";
 
-const getEpisodeId = (url) => {
+type Options = {
+  url: string;
+  language?: string;
+};
+
+const getEpisodeId = (url: string) => {
   return url.match(/tv\/(\w+)/)[1];
 };
 
-const fetchSynopsis = async ({ url, language }) => {
+const fetchSynopsis = async ({ url, language }: Options) => {
   const id = getEpisodeId(url);
   const response = await fetch(
     `https://api.viki.io/v4/containers/${id}/descriptions/${language}.json?html=true&app=100000a`
@@ -23,7 +28,7 @@ const fetchSynopsis = async ({ url, language }) => {
   `).document.body.textContent;
 };
 
-const getInfo = async ({ url, language = "en" }) => {
+export const getInfo = async ({ url, language = "en" }: Options) => {
   const response = await fetch(url, {
     headers: {
       "content-language": language,
@@ -41,7 +46,7 @@ const getInfo = async ({ url, language = "en" }) => {
   const image = document
     .querySelector("main img")
     .getAttribute("src")
-    .split("?")[0];
+    .split("?")[0]!;
 
   const [year, rating, episodes] = Array.from(
     document.querySelector("h1").parentElement.nextElementSibling
@@ -72,5 +77,3 @@ const getInfo = async ({ url, language = "en" }) => {
     synopsis,
   };
 };
-
-export { getInfo };
