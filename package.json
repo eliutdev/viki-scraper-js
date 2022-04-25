@@ -1,0 +1,24 @@
+{
+  "name": "viki-scraper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "test": "Get the show information from the Viki website."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eliutdev/viki-scraper-js.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eliutdev/viki-scraper-js/issues"
+  },
+  "homepage": "https://github.com/eliutdev/viki-scraper-js#readme",
+  "dependencies": {
+    "linkedom": "^0.14.7"
+  }
+}
