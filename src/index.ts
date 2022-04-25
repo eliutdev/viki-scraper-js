@@ -1,4 +1,4 @@
-import { parseHTML } from "linkedom";
+import { parseHTML } from 'linkedom';
 
 type Options = {
   url: string;
@@ -12,10 +12,10 @@ const getEpisodeId = (url: string) => {
   }
 };
 
-const fetchSynopsis = async ({ url, language = "en" }: Options) => {
+const fetchSynopsis = async ({ url, language = 'en' }: Options) => {
   const id = getEpisodeId(url);
   const response = await fetch(
-    `https://api.viki.io/v4/containers/${id}/descriptions/${language}.json?html=true&app=100000a`
+    `https://api.viki.io/v4/containers/${id}/descriptions/${language}.json?html=true&app=100000a`,
   );
   const json = await response.json();
   return parseHTML(`
@@ -31,41 +31,35 @@ const fetchSynopsis = async ({ url, language = "en" }: Options) => {
   `).document.body.textContent;
 };
 
-export const getInfo = async ({ url, language = "en" }: Options) => {
+export const getInfo = async ({ url, language = 'en' }: Options) => {
   const response = await fetch(url, {
     headers: {
-      "content-language": language,
-      "accept-language": language,
+      'content-language': language,
+      'accept-language': language,
     },
   });
   const html = await response.text();
 
   const { document } = parseHTML(html);
 
-  const title = document.querySelector("h1");
-  const originalTitle =
-    document.querySelector("h1")!.parentElement!.nextElementSibling;
+  const title = document.querySelector('h1');
+  const originalTitle = document.querySelector('h1')!.parentElement!.nextElementSibling;
 
-  const image = document
-    .querySelector("main img")!
-    .getAttribute("src")!
-    .split("?")[0];
+  const image = document.querySelector('main img')!.getAttribute('src')!.split('?')[0];
 
   const [year, rating, episodes] = Array.from(
-    document.querySelector("h1")!.parentElement!.nextElementSibling!
-      .nextElementSibling!.children
+    document.querySelector('h1')!.parentElement!.nextElementSibling!.nextElementSibling!.children,
   ).map((el) => el.textContent);
 
   const [genres, cast] = Array.from(
-    document.querySelector("h1")!.parentElement!.parentElement!
-      .nextElementSibling!.children
+    document.querySelector('h1')!.parentElement!.parentElement!.nextElementSibling!.children,
   )
     .map((el) => {
-      const childs = Array.from(el.querySelectorAll("span"));
+      const childs = Array.from(el.querySelectorAll('span'));
       if (!childs.length) return [];
       return childs.map((el) => {
         if (el && el.textContent) {
-          return el.textContent.split(",");
+          return el.textContent.split(',');
         }
       });
     })
@@ -74,12 +68,12 @@ export const getInfo = async ({ url, language = "en" }: Options) => {
   const synopsis = await fetchSynopsis({ url, language });
 
   return {
-    title: title ? title.textContent : "",
-    originalTitle: originalTitle ? originalTitle.textContent : "",
+    title: title ? title.textContent : '',
+    originalTitle: originalTitle ? originalTitle.textContent : '',
     image,
-    year: year && year.replace(/\D/g, ""),
-    rating: rating && rating.replace(/\D/g, ""),
-    episodes: episodes && episodes.replace(/\D/g, ""),
+    year: year && year.replace(/\D/g, ''),
+    rating: rating && rating.replace(/\D/g, ''),
+    episodes: episodes && episodes.replace(/\D/g, ''),
     genres,
     cast,
     synopsis,
