@@ -1,6 +1,6 @@
 {
   "name": "viki-scraper",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "description": "",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -13,8 +13,12 @@
     "build": "esbuild src/index.ts --format=esm --outdir=lib --minify && npm run types",
     "types": "tsc --declaration --emitDeclarationOnly",
     "test": "jest --config jestconfig.json",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "eslint src --ext .ts --fix",
     "prepare": "npm run build",
-    "version": "git add -A src",
+    "prepublishOnly": "npm run test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags"
   },
   "repository": {
@@ -29,8 +33,7 @@
   },
   "homepage": "https://github.com/eliutdev/viki-scraper-js#readme",
   "dependencies": {
-    "linkedom": "^0.14.7",
-    "node-fetch": "^3.2.3"
+    "linkedom": "^0.14.7"
   },
   "devDependencies": {
     "@types/jest": "27.4.1",
