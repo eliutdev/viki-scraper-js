@@ -1,13 +1,17 @@
 <script setup>
-import { ref } from "vue";
-import { getInfo } from "viki-scraper";
+import { ref } from 'vue';
 
-const url = ref("https://www.viki.com/tv/38493c-dont-be-shy");
+const url = ref('https://www.viki.com/tv/38493c-dont-be-shy');
 
 const handleSubmit = async () => {
-  const info = await getInfo({
-    url: url.value,
+  const response = await fetch('/api/scraper', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ url: url.value }),
   });
+  const info = await response.json();
   console.log(info);
 };
 </script>
