@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "highlight.js": "^11.5.1",
     "viki-scraper": "1.0.4",
     "vue": "^3.2.25"
   },
