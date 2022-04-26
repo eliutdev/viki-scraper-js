@@ -1,4 +1,5 @@
 import { parseHTML } from 'linkedom';
+import axios from 'axios';
 
 type Options = {
   url: string;
@@ -14,10 +15,9 @@ const getEpisodeId = (url: string) => {
 
 const fetchSynopsis = async ({ url, language = 'en' }: Options) => {
   const id = getEpisodeId(url);
-  const response = await fetch(
+  const { data } = await axios(
     `https://api.viki.io/v4/containers/${id}/descriptions/${language}.json?html=true&app=100000a`,
   );
-  const json = await response.json();
   return parseHTML(`
     <!doctype html>
     <html lang="en">
@@ -25,22 +25,22 @@ const fetchSynopsis = async ({ url, language = 'en' }: Options) => {
         <title>Hello SSR</title>
     </head>
     <body>
-        ${json.description.viki[language]}
+        ${data.description.viki[language]}
     </body>
     </html>
   `).document.body.textContent;
 };
 
 export const getInfo = async ({ url, language = 'en' }: Options) => {
-  const response = await fetch(url, {
+  const { data } = await axios(url, {
     headers: {
       'content-language': language,
       'accept-language': language,
     },
+    responseType: 'text',
   });
-  const html = await response.text();
 
-  const { document } = parseHTML(html);
+  const { document } = parseHTML(data);
 
   const title = document.querySelector('h1');
   const originalTitle = document.querySelector('h1')!.parentElement!.nextElementSibling;
