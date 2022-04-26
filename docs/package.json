@@ -8,7 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "viki-scraper": "^1.0.2",
+    "viki-scraper": "^1.0.3",
     "vue": "^3.2.25"
   },
   "devDependencies": {
