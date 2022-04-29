@@ -8,7 +8,7 @@ const info = ref({});
 const error = ref(null);
 const loading = ref(false);
 
-const languages = navigator.languages;
+const languages = [...new Set(navigator.languages.map((l) => l.split('-')[0]))];
 
 const handleSubmit = async () => {
   try {
