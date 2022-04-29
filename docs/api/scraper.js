@@ -1,8 +1,8 @@
 import { getInfo } from 'viki-scraper';
 
 const handler = async (req, res) => {
-  const { url } = req.body;
-  const info = await getInfo({ url });
+  const { url, lang } = req.body;
+  const info = await getInfo({ url, lang });
   res.json(info);
 };
 

@@ -3,9 +3,12 @@ import { ref } from 'vue';
 import CodePreview from './components/CodePreview.vue';
 
 const url = ref('https://www.viki.com/tv/38493c-dont-be-shy');
+const lang = ref(navigator.language);
 const info = ref({});
 const error = ref(null);
 const loading = ref(false);
+
+const languages = navigator.languages;
 
 const handleSubmit = async () => {
   try {
@@ -15,7 +18,7 @@ const handleSubmit = async () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ url: url.value }),
+      body: JSON.stringify({ url: url.value, lang: lang.value }),
     });
     const data = await response.json();
     info.value = data;
@@ -32,6 +35,11 @@ const handleSubmit = async () => {
     <h1>Viki Scraper</h1>
     <form @submit.prevent="handleSubmit">
       <input type="url" v-model="url" />
+      <select v-model="lang">
+        <option v-for="lang in languages" :key="lang">
+          {{ lang }}
+        </option>
+      </select>
       <input type="submit" :value="loading ? 'Scraping...' : 'Scrape'" :disabled="loading" />
     </form>
     <div v-if="error">{{ error }}</div>
@@ -57,11 +65,16 @@ h1,
 form {
   text-align: center;
 }
-input {
+form {
+  display: grid;
+  grid-template-columns: 80% 10% 10%;
+  gap: 1rem;
+}
+input,
+select {
   display: block;
   width: 100%;
   padding: 0.5rem;
-  margin-bottom: 1rem;
   border: 1px solid #000;
   border-radius: 4px;
   padding: 0.5rem;
